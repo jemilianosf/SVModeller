@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 import pysam
 import distfit
+import os
 from distfit import distfit
 from GAPI import formats, gRanges
 
@@ -44,6 +45,23 @@ DEFAULT_DELETION_EVENT_COLUMNS = [
     'SVA__Alu-like+VNTR+SINE-R+POLYA', 'SVA__SINE-R+POLYA', 'SVA__Hexamer+Alu-like+VNTR+SINE-R+POLYA+TD+POLYA',
     'L1__TRUN+FOR+POLYA+TD+POLYA', 'SVA__MAST2+VNTR+SINE-R+POLYA+TD+POLYA', 'L1__TRUN+REV+DUP+FOR+POLYA', 'VNTR'
 ]
+
+def set_seed(seed: int = 42):
+    """Sets random seeds across all libraries used in SVModeller
+
+    to ensure reproducible results.
+    """
+    if seed is None:
+        return
+
+    # Set standard Python random seed
+    random.seed(seed)
+
+    # Set NumPy random seed
+    np.random.seed(seed)
+
+    # Set Python hash seed for consistent dictionary/set ordering
+    os.environ['PYTHONHASHSEED'] = str(seed)
 
 def TD_filter(df):
     def check_conditions(row):

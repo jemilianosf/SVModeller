@@ -21,17 +21,20 @@
 import argparse
 import pandas as pd
 import warnings
-from functions import write_fasta, safe_int_val
+from functions import set_seed, write_fasta, safe_int_val
 from GAPI import formats
 
 # Remove FutureWarnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-def main(file1, file2, fasta_file):
+def main(file1, file2, fasta_file, seed):
     print(f'File 1 path: {file1}')
     if file2:
         print(f'File 2 path: {file2}')
     print(f'FASTA file: {fasta_file}')
+
+    # Set seed
+    set_seed(seed)
 
     # Load and merge input TSV files
     df_1 = pd.read_csv(file1, sep='\t', compression='infer')
@@ -97,5 +100,7 @@ if __name__ == "__main__":
     parser.add_argument('--file1', type=str, required=True, help='Path to the first TSV file.')
     parser.add_argument('--fasta_file', type=str, required=True, help='Path to the FASTA file.')
     parser.add_argument('--file2', type=str, nargs='?', default=None, required=False, help='Optional path to the second TSV file.')
+    parser.add_argument('--seed', type=str, nargs='?', default=None, required=False, help='Optional path to the second TSV file.')
+
     args = parser.parse_args()
-    main(args.file1, args.file2, args.fasta_file)
+    main(args.file1, args.file2, args.fasta_file, args.seed)
